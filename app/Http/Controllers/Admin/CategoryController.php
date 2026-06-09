@@ -4,21 +4,29 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+// use Illuminate\Support\Facades\DB; // Lab 06 - Query Builder
+use App\Models\Category; // Lab 07 - Eloquent ORM
 
 class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $list = DB::table('categories')
-            ->select('cateid', 'catename', 'slug', 'image', 'status')
-            ->where('status', 1)
-            ->orderBy('catename')
-            ->get();
-            
+        // ===================== LAB 06 - Query Builder =====================
+        // $list = DB::table('categories')
+        //     ->select('cateid', 'catename', 'slug', 'image', 'status')
+        //     ->where('status', 1)
+        //     ->orderBy('catename')
+        //     ->get();
+        // ==================================================================
+
+        // ===================== LAB 07 - Eloquent ORM =====================
+        $limit = $request->input('limit', 10);
+        $list = Category::where('status', 1)->orderBy('catename')->paginate($limit);
+        // =================================================================
+
         return view('admin.categories.index', compact('list'));
     }
 
@@ -35,13 +43,25 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        DB::table('categories')->insert([
-            'catename' => $request->catename,
-            'slug' => $request->slug,
-            'created_at' => now(),
-            'updated_at' => now()
+        // ===================== LAB 06 - Query Builder =====================
+        // DB::table('categories')->insert([
+        //     'catename'   => $request->catename,
+        //     'slug'       => $request->slug,
+        //     'created_at' => now(),
+        //     'updated_at' => now()
+        // ]);
+        // ==================================================================
+
+        // ===================== LAB 07 - Eloquent ORM =====================
+        Category::create([
+            'catename'    => $request->catename,
+            'slug'        => $request->slug,
+            'status'      => $request->input('status', 1),
+            'sort_order'  => $request->input('sort_order', 0),
+            'description' => $request->input('description'),
         ]);
-        
+        // =================================================================
+
         return redirect()->route('admin.categories.index');
     }
 
@@ -58,7 +78,14 @@ class CategoryController extends Controller
      */
     public function edit(string $id)
     {
-        $category = DB::table('categories')->where('cateid', $id)->first();
+        // ===================== LAB 06 - Query Builder =====================
+        // $category = DB::table('categories')->where('cateid', $id)->first();
+        // ==================================================================
+
+        // ===================== LAB 07 - Eloquent ORM =====================
+        $category = Category::find($id);
+        // =================================================================
+
         return view('admin.categories.edit', compact('category'));
     }
 
@@ -67,13 +94,22 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        DB::table('categories')
-            ->where('cateid', $id)
-            ->update([
-                'catename' => $request->catename,
-                'slug' => $request->slug,
-                'updated_at' => now()
-            ]);
+        // ===================== LAB 06 - Query Builder =====================
+        // DB::table('categories')
+        //     ->where('cateid', $id)
+        //     ->update([
+        //         'catename'   => $request->catename,
+        //         'slug'       => $request->slug,
+        //         'updated_at' => now()
+        //     ]);
+        // ==================================================================
+
+        // ===================== LAB 07 - Eloquent ORM =====================
+        Category::find($id)->update([
+            'catename' => $request->catename,
+            'slug'     => $request->slug,
+        ]);
+        // =================================================================
 
         return redirect()->route('admin.categories.index');
     }
@@ -83,7 +119,14 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        DB::table('categories')->where('cateid', $id)->delete();
+        // ===================== LAB 06 - Query Builder =====================
+        // DB::table('categories')->where('cateid', $id)->delete();
+        // ==================================================================
+
+        // ===================== LAB 07 - Eloquent ORM =====================
+        Category::destroy($id);
+        // =================================================================
+
         return redirect()->route('admin.categories.index');
     }
 }

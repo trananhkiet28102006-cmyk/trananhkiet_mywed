@@ -22,10 +22,10 @@
     <tbody>
         @foreach($list as $index => $item)
         <tr>
-            <td>{{ $index + 1 }}</td>
+            <td>{{ ($list->currentPage() - 1) * $list->perPage() + $index + 1 }}</td>
             <td>{{ $item->id }}</td>
             <td>{{ $item->title }}</td>
-            <td>{{ $item->fullname }}</td>
+            <td>{{ $item->user?->fullname }}</td>
             <td>
                 @if($item->image && file_exists(public_path('images/' . $item->image)))
                     <img src="{{ asset('images/' . $item->image) }}" alt="Image" width="60">
@@ -44,4 +44,8 @@
         @endforeach
     </tbody>
 </table>
+
+<div class="d-flex justify-content-center mt-3">
+    {{ $list->links() }}
+</div>
 @endsection

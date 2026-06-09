@@ -18,10 +18,23 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'fullname',
+        'username',
         'email',
         'password',
+        'phone',
+        'address',
+        'role',
+        'status',
     ];
+
+    // ===================== Quan hệ (Relationship) =====================
+
+    // Một User CÓ NHIỀU Posts
+    public function posts()
+    {
+        return $this->hasMany(Post::class, 'user_id', 'id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.

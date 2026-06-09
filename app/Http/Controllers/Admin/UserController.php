@@ -4,20 +4,28 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+// use Illuminate\Support\Facades\DB; // Lab 06 - Query Builder
+use App\Models\User; // Lab 07 - Eloquent ORM
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $list = DB::table('users')
-            ->select('id', 'fullname', 'username', 'email', 'phone', 'address', 'role', 'status')
-            ->where('status', 1)
-            ->orderBy('fullname')
-            ->get();
+        // ===================== LAB 06 - Query Builder =====================
+        // $list = DB::table('users')
+        //     ->select('id', 'fullname', 'username', 'email', 'phone', 'address', 'role', 'status')
+        //     ->where('status', 1)
+        //     ->orderBy('fullname')
+        //     ->get();
+        // ==================================================================
+
+        // ===================== LAB 07 - Eloquent ORM =====================
+        $limit = $request->input('limit', 10);
+        $list = User::where('status', 1)->orderBy('fullname')->paginate($limit);
+        // =================================================================
 
         return view('admin.users.index', compact('list'));
     }
@@ -30,12 +38,36 @@ class UserController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        // ===================== LAB 06 - Query Builder =====================
+        // DB::table('users')->insert([
+        //     'fullname'   => $request->fullname,
+        //     'username'   => $request->username,
+        //     'email'      => $request->email,
+        //     'password'   => bcrypt($request->password),
+        //     'phone'      => $request->phone,
+        //     'address'    => $request->address,
+        //     'role'       => $request->role,
+        //     'created_at' => now(),
+        //     'updated_at' => now()
+        // ]);
+        // ==================================================================
+
+        // ===================== LAB 07 - Eloquent ORM =====================
+        User::create([
+            'fullname' => $request->fullname,
+            'username' => $request->username,
+            'email'    => $request->email,
+            'password' => bcrypt($request->password),
+            'phone'    => $request->phone,
+            'address'  => $request->address,
+            'role'     => $request->input('role', 2),
+            'status'   => $request->input('status', 1),
+        ]);
+        // =================================================================
+
+        return redirect()->route('admin.users.index');
     }
 
     /**

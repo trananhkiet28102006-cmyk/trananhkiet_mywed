@@ -27,7 +27,7 @@
     <tbody>
         @foreach($list as $index => $item)
         <tr>
-            <td>{{ $index + 1 }}</td>
+            <td>{{ ($list->currentPage() - 1) * $list->perPage() + $index + 1 }}</td>
             <td>{{ $item->cateid }}</td>
             <td>{{ $item->catename }}</td>
             <td>{{ $item->slug }}</td>
@@ -63,4 +63,8 @@
         @endforeach
     </tbody>
 </table>
+
+<div class="d-flex justify-content-center mt-3">
+    {{ $list->links() }}
+</div>
 @endsection

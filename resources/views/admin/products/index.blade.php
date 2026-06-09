@@ -25,13 +25,13 @@
     <tbody>
         @foreach($list as $index => $item)
         <tr>
-            <td>{{ $index + 1 }}</td>
+            <td>{{ ($list->currentPage() - 1) * $list->perPage() + $index + 1 }}</td>
             <td>{{ $item->id }}</td>
             <td>{{ $item->productname }}</td>
             <td>{{ number_format($item->price, 0, ',', '.') }}đ</td>
             <td>{{ number_format($item->pricediscount, 0, ',', '.') }}đ</td>
-            <td>{{ $item->catename }}</td>
-            <td>{{ $item->brandname ?? 'N/A' }}</td>
+            <td>{{ $item->category?->catename }}</td>
+            <td>{{ $item->brand?->brandname ?? 'N/A' }}</td>
             <td>
                 @if($item->image && file_exists(public_path('images/' . $item->image)))
                     <img src="{{ asset('images/' . $item->image) }}" alt="Image" width="50">
@@ -50,4 +50,8 @@
         @endforeach
     </tbody>
 </table>
+
+<div class="d-flex justify-content-center mt-3">
+    {{ $list->links() }}
+</div>
 @endsection
