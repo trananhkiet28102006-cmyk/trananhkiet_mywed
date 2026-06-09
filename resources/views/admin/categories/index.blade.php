@@ -8,6 +8,10 @@
 @section('content')
 <h2 class="mb-3">DANH SÁCH LOẠI SẢN PHẨM</h2>
 
+<a href="{{ route('admin.categories.create') }}" class="btn btn-success mb-3">
+    <i class="bi bi-plus-lg"></i> Thêm mới
+</a>
+
 <table class="table table-bordered table-hover table-striped">
     <thead class="table-dark">
         <tr>
@@ -17,6 +21,7 @@
             <th>Slug</th>
             <th>Ảnh đại diện</th>
             <th>Trạng thái</th>
+            <th>Chức năng</th>
         </tr>
     </thead>
     <tbody>
@@ -27,7 +32,7 @@
             <td>{{ $item->catename }}</td>
             <td>{{ $item->slug }}</td>
             <td>
-                @if($item->image)
+                @if($item->image && file_exists(public_path('images/' . $item->image)))
                     <img src="{{ asset('images/' . $item->image) }}" alt="Image" width="50">
                 @else
                     <img src="{{ asset('images/default.png') }}" alt="Default" width="50">
@@ -39,6 +44,20 @@
                 @else
                     <span class="badge bg-danger">Ẩn</span>
                 @endif
+            </td>
+            <td>
+                <div class="d-flex gap-1">
+                    <a href="{{ route('admin.categories.edit', $item->cateid) }}" class="btn btn-warning btn-sm">
+                        <i class="bi bi-pencil-square"></i> Sửa
+                    </a>
+                    <form action="{{ route('admin.categories.destroy', $item->cateid) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa loại sản phẩm này?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash"></i> Xóa
+                        </button>
+                    </form>
+                </div>
             </td>
         </tr>
         @endforeach
