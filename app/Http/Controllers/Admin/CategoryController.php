@@ -53,16 +53,19 @@ class CategoryController extends Controller
         // ==================================================================
 
         // ===================== LAB 07 - Eloquent ORM =====================
-        Category::create([
-            'catename'    => $request->catename,
-            'slug'        => $request->slug,
-            'status'      => $request->input('status', 1),
-            'sort_order'  => $request->input('sort_order', 0),
-            'description' => $request->input('description'),
-        ]);
+        try {
+            Category::create([
+                'catename'    => $request->catename,
+                'slug'        => $request->slug,
+                'status'      => $request->input('status', 1),
+                'sort_order'  => $request->input('sort_order', 0),
+                'description' => $request->input('description'),
+            ]);
+            return redirect()->route('admin.categories.index')->with('success', 'Thêm danh mục thành công!');
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error', 'Lỗi thêm mới: ' . $e->getMessage());
+        }
         // =================================================================
-
-        return redirect()->route('admin.categories.index');
     }
 
     /**
@@ -105,13 +108,16 @@ class CategoryController extends Controller
         // ==================================================================
 
         // ===================== LAB 07 - Eloquent ORM =====================
-        Category::find($id)->update([
-            'catename' => $request->catename,
-            'slug'     => $request->slug,
-        ]);
+        try {
+            Category::find($id)->update([
+                'catename' => $request->catename,
+                'slug'     => $request->slug,
+            ]);
+            return redirect()->route('admin.categories.index')->with('success', 'Sửa danh mục thành công!');
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error', 'Lỗi cập nhật: ' . $e->getMessage());
+        }
         // =================================================================
-
-        return redirect()->route('admin.categories.index');
     }
 
     /**

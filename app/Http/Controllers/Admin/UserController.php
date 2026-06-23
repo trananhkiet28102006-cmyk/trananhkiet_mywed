@@ -35,7 +35,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.users.create');
     }
 
     public function store(Request $request)
@@ -55,19 +55,22 @@ class UserController extends Controller
         // ==================================================================
 
         // ===================== LAB 07 - Eloquent ORM =====================
-        User::create([
-            'fullname' => $request->fullname,
-            'username' => $request->username,
-            'email'    => $request->email,
-            'password' => bcrypt($request->password),
-            'phone'    => $request->phone,
-            'address'  => $request->address,
-            'role'     => $request->input('role', 2),
-            'status'   => $request->input('status', 1),
-        ]);
+        try {
+            User::create([
+                'fullname' => $request->fullname,
+                'username' => $request->username,
+                'email'    => $request->email,
+                'password' => bcrypt($request->password),
+                'phone'    => $request->phone,
+                'address'  => $request->address,
+                'role'     => $request->input('role', 2),
+                'status'   => $request->input('status', 1),
+            ]);
+            return redirect()->route('admin.users.index')->with('success', 'Thêm người dùng thành công!');
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error', 'Lỗi thêm mới: ' . $e->getMessage());
+        }
         // =================================================================
-
-        return redirect()->route('admin.users.index');
     }
 
     /**
@@ -83,7 +86,8 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = User::find($id);
+        return view('admin.users.edit', compact('user'));
     }
 
     /**
@@ -91,7 +95,25 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $user = User::find($id);
+            $data = [
+                'fullname' => $request->fullname,
+                'username' => $request->username,
+                'email'    => $request->email,
+                'phone'    => $request->phone,
+                'address'  => $request->address,
+                'role'     => $request->input('role', 2),
+                'status'   => $request->input('status', 1),
+            ];
+            if ($request->filled('password')) {
+                $data['password'] = bcrypt($request->password);
+            }
+            $user->update($data);
+            return redirect()->route('admin.users.index')->with('success', 'Sửa người dùng thành công!');
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error', 'Lỗi cập nhật: ' . $e->getMessage());
+        }
     }
 
     /**

@@ -47,7 +47,11 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        $users = \App\Models\User::select('id', 'fullname')
+            ->where('status', 1)
+            ->orderBy('fullname')
+            ->get();
+        return view('admin.posts.create', compact('users'));
     }
 
     /**
@@ -55,7 +59,18 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            Post::create([
+                'title'   => $request->title,
+                'slug'    => $request->slug,
+                'content' => $request->content,
+                'status'  => $request->input('status', 1),
+                'user_id' => $request->user_id,
+            ]);
+            return redirect()->route('admin.posts.index')->with('success', 'Thêm bài viết thành công!');
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error', 'Lỗi thêm mới: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -71,7 +86,12 @@ class PostController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $post = Post::find($id);
+        $users = \App\Models\User::select('id', 'fullname')
+            ->where('status', 1)
+            ->orderBy('fullname')
+            ->get();
+        return view('admin.posts.edit', compact('post', 'users'));
     }
 
     /**
@@ -79,7 +99,18 @@ class PostController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            Post::find($id)->update([
+                'title'   => $request->title,
+                'slug'    => $request->slug,
+                'content' => $request->content,
+                'status'  => $request->input('status', 1),
+                'user_id' => $request->user_id,
+            ]);
+            return redirect()->route('admin.posts.index')->with('success', 'Sửa bài viết thành công!');
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error', 'Lỗi cập nhật: ' . $e->getMessage());
+        }
     }
 
     /**

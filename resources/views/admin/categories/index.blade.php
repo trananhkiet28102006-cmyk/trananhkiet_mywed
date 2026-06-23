@@ -12,6 +12,14 @@
     <i class="bi bi-plus-lg"></i> Thêm mới
 </a>
 
+{{-- Hiển thị thông báo thành công từ Session Flash --}}
+@if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill"></i> {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+
 <table class="table table-bordered table-hover table-striped">
     <thead class="table-dark">
         <tr>

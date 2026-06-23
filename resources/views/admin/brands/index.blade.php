@@ -8,6 +8,18 @@
 @section('content')
 <h2 class="mb-3">DANH SÁCH THƯƠNG HIỆU</h2>
 
+<a href="{{ route('admin.brands.create') }}" class="btn btn-success mb-3">
+    <i class="bi bi-plus-lg"></i> Thêm mới
+</a>
+
+{{-- Hiển thị thông báo thành công từ Session Flash --}}
+@if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill"></i> {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+
 <table class="table table-bordered table-hover table-striped">
     <thead class="table-dark">
         <tr>
@@ -17,6 +29,7 @@
             <th>Slug</th>
             <th>Ảnh đại diện</th>
             <th>Trạng thái</th>
+            <th>Chức năng</th>
         </tr>
     </thead>
     <tbody>
@@ -39,6 +52,11 @@
                 @else
                     <span class="badge bg-danger">Ẩn</span>
                 @endif
+            </td>
+            <td>
+                <a href="{{ route('admin.brands.edit', $item->id) }}" class="btn btn-warning btn-sm">
+                    <i class="bi bi-pencil-square"></i> Sửa
+                </a>
             </td>
         </tr>
         @endforeach

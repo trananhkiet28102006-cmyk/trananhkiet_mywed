@@ -35,7 +35,7 @@ class BrandController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.brands.create');
     }
 
     public function store(Request $request)
@@ -50,16 +50,19 @@ class BrandController extends Controller
         // ==================================================================
 
         // ===================== LAB 07 - Eloquent ORM =====================
-        Brand::create([
-            'brandname'   => $request->brandname,
-            'slug'        => $request->slug,
-            'status'      => $request->input('status', 1),
-            'sort_order'  => $request->input('sort_order', 0),
-            'description' => $request->input('description'),
-        ]);
+        try {
+            Brand::create([
+                'brandname'   => $request->brandname,
+                'slug'        => $request->slug,
+                'status'      => $request->input('status', 1),
+                'sort_order'  => $request->input('sort_order', 0),
+                'description' => $request->input('description'),
+            ]);
+            return redirect()->route('admin.brands.index')->with('success', 'Thêm thương hiệu thành công!');
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error', 'Lỗi thêm mới: ' . $e->getMessage());
+        }
         // =================================================================
-
-        return redirect()->route('admin.brands.index');
     }
 
     /**
@@ -75,7 +78,8 @@ class BrandController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $brand = Brand::find($id);
+        return view('admin.brands.edit', compact('brand'));
     }
 
     /**
@@ -83,7 +87,18 @@ class BrandController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            Brand::find($id)->update([
+                'brandname'   => $request->brandname,
+                'slug'        => $request->slug,
+                'status'      => $request->input('status', 1),
+                'sort_order'  => $request->input('sort_order', 0),
+                'description' => $request->input('description'),
+            ]);
+            return redirect()->route('admin.brands.index')->with('success', 'Sửa thương hiệu thành công!');
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error', 'Lỗi cập nhật: ' . $e->getMessage());
+        }
     }
 
     /**

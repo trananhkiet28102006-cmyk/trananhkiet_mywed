@@ -2,13 +2,13 @@
 @extends('admin.layouts.admin')
 
 {{-- Gán nội dung cho vùng section 'title' --}}
-@section('title', 'Sửa loại sản phẩm')
+@section('title', 'Sửa thương hiệu')
 
 {{-- Gán nội dung cho vùng section 'content' --}}
 @section('content')
 <div class="card shadow-sm">
     <div class="card-header bg-warning text-dark">
-        <h4 class="mb-0"><i class="bi bi-pencil-square"></i> CẬP NHẬT LOẠI SẢN PHẨM</h4>
+        <h4 class="mb-0"><i class="bi bi-pencil-square"></i> CẬP NHẬT THƯƠNG HIỆU</h4>
     </div>
     <div class="card-body">
         
@@ -20,18 +20,18 @@
             </div>
         @endif
 
-        <form action="{{ route('admin.categories.update', $category->cateid) }}" method="POST">
+        <form action="{{ route('admin.brands.update', $brand->id) }}" method="POST">
             @csrf
             @method('PUT')
             
             <div class="mb-3">
-                <label for="catename" class="form-label fw-bold">Tên loại sản phẩm</label>
+                <label for="brandname" class="form-label fw-bold">Tên thương hiệu</label>
                 <input type="text" 
-                       name="catename" 
-                       id="catename" 
+                       name="brandname" 
+                       id="brandname" 
                        class="form-control" 
-                       value="{{ old('catename', $category->catename) }}" 
-                       placeholder="Nhập tên loại sản phẩm (Ví dụ: Điện thoại, Laptop...)" 
+                       value="{{ old('brandname', $brand->brandname) }}" 
+                       placeholder="Nhập tên thương hiệu (Ví dụ: Apple, Samsung...)" 
                        required>
             </div>
             
@@ -41,8 +41,8 @@
                        name="slug" 
                        id="slug" 
                        class="form-control" 
-                       value="{{ old('slug', $category->slug) }}" 
-                       placeholder="Nhập slug (Ví dụ: dien-thoai, laptop)" 
+                       value="{{ old('slug', $brand->slug) }}" 
+                       placeholder="Nhập slug (Ví dụ: apple, samsung)" 
                        required>
             </div>
 
@@ -50,7 +50,7 @@
                 <button type="submit" class="btn btn-primary px-4 me-2">
                     <i class="bi bi-save"></i> Cập nhật
                 </button>
-                <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary px-4">
+                <a href="{{ route('admin.brands.index') }}" class="btn btn-secondary px-4">
                     <i class="bi bi-arrow-left"></i> Quay lại
                 </a>
             </div>
@@ -58,9 +58,9 @@
     </div>
 </div>
 
-{{-- Script tự động sinh slug từ tên loại --}}
+{{-- Script tự động sinh slug từ tên thương hiệu --}}
 <script>
-    document.getElementById('catename').addEventListener('input', function() {
+    document.getElementById('brandname').addEventListener('input', function() {
         let title = this.value;
         let slug = title.toLowerCase();
         

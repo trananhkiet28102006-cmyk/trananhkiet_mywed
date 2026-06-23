@@ -53,7 +53,15 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        $categories = \App\Models\Category::select('cateid', 'catename')
+            ->where('status', 1)
+            ->orderBy('catename')
+            ->get();
+        $brands = \App\Models\Brand::select('id', 'brandname')
+            ->where('status', 1)
+            ->orderBy('brandname')
+            ->get();
+        return view('admin.products.create', compact('categories', 'brands'));
     }
 
     /**
@@ -61,7 +69,21 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            Product::create([
+                'productname'   => $request->productname,
+                'slug'          => $request->slug,
+                'price'         => $request->price,
+                'pricediscount' => $request->input('pricediscount', 0),
+                'description'   => $request->description,
+                'status'        => $request->input('status', 1),
+                'cateid'        => $request->cateid,
+                'brandid'       => $request->brandid,
+            ]);
+            return redirect()->route('admin.products.index')->with('success', 'Thêm sản phẩm thành công!');
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error', 'Lỗi thêm mới: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -77,7 +99,16 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $product = Product::find($id);
+        $categories = \App\Models\Category::select('cateid', 'catename')
+            ->where('status', 1)
+            ->orderBy('catename')
+            ->get();
+        $brands = \App\Models\Brand::select('id', 'brandname')
+            ->where('status', 1)
+            ->orderBy('brandname')
+            ->get();
+        return view('admin.products.edit', compact('product', 'categories', 'brands'));
     }
 
     /**
@@ -85,7 +116,21 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            Product::find($id)->update([
+                'productname'   => $request->productname,
+                'slug'          => $request->slug,
+                'price'         => $request->price,
+                'pricediscount' => $request->input('pricediscount', 0),
+                'description'   => $request->description,
+                'status'        => $request->input('status', 1),
+                'cateid'        => $request->cateid,
+                'brandid'       => $request->brandid,
+            ]);
+            return redirect()->route('admin.products.index')->with('success', 'Sửa sản phẩm thành công!');
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error', 'Lỗi cập nhật: ' . $e->getMessage());
+        }
     }
 
     /**
