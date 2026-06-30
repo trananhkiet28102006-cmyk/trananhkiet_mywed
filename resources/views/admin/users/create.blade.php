@@ -11,13 +11,7 @@
         <h4 class="mb-0"><i class="bi bi-plus-circle"></i> THÊM NGƯỜI DÙNG MỚI</h4>
     </div>
     <div class="card-body">
-        {{-- Hiển thị thông báo lỗi từ Session Flash --}}
-        @if(session('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <i class="bi bi-exclamation-triangle-fill"></i> {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
+        <x-admin.alert />
 
         <form action="{{ route('admin.users.store') }}" method="POST">
             @csrf
@@ -27,10 +21,12 @@
                 <input type="text" 
                        name="fullname" 
                        id="fullname" 
-                       class="form-control" 
+                       class="form-control @error('fullname') is-invalid @enderror" 
                        value="{{ old('fullname') }}"
-                       placeholder="Nhập họ và tên (Ví dụ: Nguyễn Văn A)" 
-                       required>
+                       placeholder="Nhập họ và tên (Ví dụ: Nguyễn Văn A)">
+                @error('fullname')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
             
             <div class="mb-3">
@@ -38,10 +34,12 @@
                 <input type="text" 
                        name="username" 
                        id="username" 
-                       class="form-control" 
+                       class="form-control @error('username') is-invalid @enderror" 
                        value="{{ old('username') }}"
-                       placeholder="Nhập tên đăng nhập (Ví dụ: anguyen)" 
-                       required>
+                       placeholder="Nhập tên đăng nhập (Ví dụ: anguyen)">
+                @error('username')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
@@ -49,10 +47,12 @@
                 <input type="email" 
                        name="email" 
                        id="email" 
-                       class="form-control" 
+                       class="form-control @error('email') is-invalid @enderror" 
                        value="{{ old('email') }}"
-                       placeholder="Nhập email (Ví dụ: anguyen@example.com)" 
-                       required>
+                       placeholder="Nhập email (Ví dụ: anguyen@example.com)">
+                @error('email')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
@@ -60,9 +60,11 @@
                 <input type="password" 
                        name="password" 
                        id="password" 
-                       class="form-control" 
-                       placeholder="Nhập mật khẩu truy cập" 
-                       required>
+                       class="form-control @error('password') is-invalid @enderror" 
+                       placeholder="Nhập mật khẩu truy cập">
+                @error('password')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
@@ -70,9 +72,12 @@
                 <input type="text" 
                        name="phone" 
                        id="phone" 
-                       class="form-control" 
+                       class="form-control @error('phone') is-invalid @enderror" 
                        value="{{ old('phone') }}"
                        placeholder="Nhập số điện thoại (Ví dụ: 0901234567)">
+                @error('phone')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
@@ -80,17 +85,23 @@
                 <input type="text" 
                        name="address" 
                        id="address" 
-                       class="form-control" 
+                       class="form-control @error('address') is-invalid @enderror" 
                        value="{{ old('address') }}"
                        placeholder="Nhập địa chỉ cư trú">
+                @error('address')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
                 <label for="role" class="form-label fw-bold">Vai trò hệ thống</label>
-                <select name="role" id="role" class="form-select">
+                <select name="role" id="role" class="form-select @error('role') is-invalid @enderror">
                     <option value="2" {{ old('role', 2) == 2 ? 'selected' : '' }}>User (Khách hàng)</option>
                     <option value="1" {{ old('role', 2) == 1 ? 'selected' : '' }}>Admin (Quản trị viên)</option>
                 </select>
+                @error('role')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
@@ -104,6 +115,9 @@
                 <label class="btn btn-outline-danger" for="inactive">
                     <i class="bi bi-slash-circle"></i> Khóa
                 </label>
+                @error('status')
+                    <div class="text-danger small mt-1">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mt-4">

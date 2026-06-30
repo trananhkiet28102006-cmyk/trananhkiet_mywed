@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\Admin\BrandRequest; // Lab 09
 // use Illuminate\Support\Facades\DB; // Lab 06 - Query Builder
 use App\Models\Brand; // Lab 07 - Eloquent ORM
 
@@ -38,7 +39,7 @@ class BrandController extends Controller
         return view('admin.brands.create');
     }
 
-    public function store(Request $request)
+    public function store(BrandRequest $request)
     {
         // ===================== LAB 06 - Query Builder =====================
         // DB::table('brands')->insert([
@@ -85,7 +86,7 @@ class BrandController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(BrandRequest $request, string $id)
     {
         try {
             Brand::find($id)->update([

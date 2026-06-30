@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\Admin\UserRequest; // Lab 09
 // use Illuminate\Support\Facades\DB; // Lab 06 - Query Builder
 use App\Models\User; // Lab 07 - Eloquent ORM
 
@@ -38,7 +39,7 @@ class UserController extends Controller
         return view('admin.users.create');
     }
 
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
         // ===================== LAB 06 - Query Builder =====================
         // DB::table('users')->insert([
@@ -93,7 +94,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UserRequest $request, string $id)
     {
         try {
             $user = User::find($id);

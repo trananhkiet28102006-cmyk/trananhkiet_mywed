@@ -12,13 +12,7 @@
     </div>
     <div class="card-body">
         
-        {{-- Hiển thị thông báo lỗi từ Session Flash --}}
-        @if(session('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <i class="bi bi-exclamation-triangle-fill"></i> {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
+        <x-admin.alert />
 
         <form action="{{ route('admin.posts.store') }}" method="POST">
             @csrf
@@ -28,10 +22,12 @@
                 <input type="text" 
                        name="title" 
                        id="title" 
-                       class="form-control" 
+                       class="form-control @error('title') is-invalid @enderror" 
                        value="{{ old('title') }}" 
-                       placeholder="Nhập tiêu đề bài viết..." 
-                       required>
+                       placeholder="Nhập tiêu đề bài viết...">
+                @error('title')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
             
             <div class="mb-3">
@@ -39,15 +35,17 @@
                 <input type="text" 
                        name="slug" 
                        id="slug" 
-                       class="form-control" 
+                       class="form-control @error('slug') is-invalid @enderror" 
                        value="{{ old('slug') }}" 
-                       placeholder="Nhập slug..." 
-                       required>
+                       placeholder="Nhập slug...">
+                @error('slug')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
                 <label for="user_id" class="form-label fw-bold">Tác giả (Người đăng)</label>
-                <select name="user_id" id="user_id" class="form-select" required>
+                <select name="user_id" id="user_id" class="form-select @error('user_id') is-invalid @enderror">
                     <option value="">-- Chọn tác giả --</option>
                     @foreach($users as $user)
                         <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
@@ -55,6 +53,9 @@
                         </option>
                     @endforeach
                 </select>
+                @error('user_id')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
@@ -68,16 +69,21 @@
                 <label class="btn btn-outline-danger" for="inactive">
                     <i class="bi bi-eye-slash"></i> Ẩn
                 </label>
+                @error('status')
+                    <div class="text-danger small mt-1">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
                 <label for="content" class="form-label fw-bold">Nội dung bài viết</label>
                 <textarea name="content" 
                           id="content" 
-                          class="form-control" 
+                          class="form-control @error('content') is-invalid @enderror" 
                           rows="6" 
-                          placeholder="Nhập nội dung bài viết..." 
-                          required>{{ old('content') }}</textarea>
+                          placeholder="Nhập nội dung bài viết...">{{ old('content') }}</textarea>
+                @error('content')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mt-4">

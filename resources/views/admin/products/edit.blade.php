@@ -12,13 +12,7 @@
     </div>
     <div class="card-body">
         
-        {{-- Hiển thị thông báo lỗi từ Session Flash --}}
-        @if(session('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <i class="bi bi-exclamation-triangle-fill"></i> {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
+        <x-admin.alert />
 
         <form action="{{ route('admin.products.update', $product->id) }}" method="POST">
             @csrf
@@ -29,10 +23,12 @@
                 <input type="text" 
                        name="productname" 
                        id="productname" 
-                       class="form-control" 
+                       class="form-control @error('productname') is-invalid @enderror" 
                        value="{{ old('productname', $product->productname) }}" 
-                       placeholder="Nhập tên sản phẩm" 
-                       required>
+                       placeholder="Nhập tên sản phẩm">
+                @error('productname')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
             
             <div class="mb-3">
@@ -40,10 +36,12 @@
                 <input type="text" 
                        name="slug" 
                        id="slug" 
-                       class="form-control" 
+                       class="form-control @error('slug') is-invalid @enderror" 
                        value="{{ old('slug', $product->slug) }}" 
-                       placeholder="Nhập slug" 
-                       required>
+                       placeholder="Nhập slug">
+                @error('slug')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="row">
@@ -52,28 +50,33 @@
                     <input type="number" 
                            name="price" 
                            id="price" 
-                           class="form-control" 
+                           class="form-control @error('price') is-invalid @enderror" 
                            value="{{ old('price', $product->price) }}" 
                            placeholder="Nhập giá bán" 
-                           min="0" 
-                           required>
+                           min="0">
+                    @error('price')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="pricediscount" class="form-label fw-bold">Giá khuyến mãi (VNĐ)</label>
                     <input type="number" 
                            name="pricediscount" 
                            id="pricediscount" 
-                           class="form-control" 
+                           class="form-control @error('pricediscount') is-invalid @enderror" 
                            value="{{ old('pricediscount', $product->pricediscount) }}" 
                            placeholder="Nhập giá khuyến mãi" 
                            min="0">
+                    @error('pricediscount')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="cateid" class="form-label fw-bold">Danh mục loại sản phẩm</label>
-                    <select name="cateid" id="cateid" class="form-select">
+                    <select name="cateid" id="cateid" class="form-select @error('cateid') is-invalid @enderror">
                         <option value="">-- Chọn loại sản phẩm --</option>
                         @foreach($categories as $category)
                             <option value="{{ $category->cateid }}" {{ old('cateid', $product->cateid) == $category->cateid ? 'selected' : '' }}>
@@ -81,10 +84,13 @@
                             </option>
                         @endforeach
                     </select>
+                    @error('cateid')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="brandid" class="form-label fw-bold">Thương hiệu</label>
-                    <select name="brandid" id="brandid" class="form-select">
+                    <select name="brandid" id="brandid" class="form-select @error('brandid') is-invalid @enderror">
                         <option value="">-- Chọn thương hiệu --</option>
                         @foreach($brands as $brand)
                             <option value="{{ $brand->id }}" {{ old('brandid', $product->brandid) == $brand->id ? 'selected' : '' }}>
@@ -92,6 +98,9 @@
                             </option>
                         @endforeach
                     </select>
+                    @error('brandid')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
             </div>
 
@@ -106,15 +115,21 @@
                 <label class="btn btn-outline-danger" for="inactive">
                     <i class="bi bi-eye-slash"></i> Ẩn
                 </label>
+                @error('status')
+                    <div class="text-danger small mt-1">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
                 <label for="description" class="form-label fw-bold">Mô tả sản phẩm</label>
                 <textarea name="description" 
                           id="description" 
-                          class="form-control" 
+                          class="form-control @error('description') is-invalid @enderror" 
                           rows="4" 
                           placeholder="Mô tả chi tiết sản phẩm...">{{ old('description', $product->description) }}</textarea>
+                @error('description')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mt-4">

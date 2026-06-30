@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\Admin\ProductRequest; // Lab 09
 // use Illuminate\Support\Facades\DB; // Lab 06 - Query Builder
 use App\Models\Product; // Lab 07 - Eloquent ORM
 
@@ -67,7 +68,7 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
         try {
             Product::create([
@@ -114,7 +115,7 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ProductRequest $request, string $id)
     {
         try {
             Product::find($id)->update([

@@ -12,13 +12,7 @@
     </div>
     <div class="card-body">
         
-        {{-- Hiển thị thông báo lỗi từ Session Flash --}}
-        @if(session('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <i class="bi bi-exclamation-triangle-fill"></i> {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
+        <x-admin.alert />
 
         <form action="{{ route('admin.categories.store') }}" method="POST">
             @csrf
@@ -28,10 +22,12 @@
                 <input type="text" 
                        name="catename" 
                        id="catename" 
-                       class="form-control" 
+                       class="form-control {{ $errors->has('catename') ? 'is-invalid' : '' }}" 
                        value="{{ old('catename') }}" 
-                       placeholder="Nhập tên loại sản phẩm (Ví dụ: Điện thoại, Laptop...)" 
-                       required>
+                       placeholder="Nhập tên loại sản phẩm (Ví dụ: Điện thoại, Laptop...)">
+                @error('catename')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
             
             <div class="mb-3">
@@ -39,10 +35,27 @@
                 <input type="text" 
                        name="slug" 
                        id="slug" 
-                       class="form-control" 
+                       class="form-control {{ $errors->has('slug') ? 'is-invalid' : '' }}" 
                        value="{{ old('slug') }}" 
-                       placeholder="Nhập slug (Ví dụ: dien-thoai, laptop)" 
-                       required>
+                       placeholder="Nhập slug (Ví dụ: dien-thoai, laptop)">
+                @error('slug')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold d-block">Trạng thái</label>
+                <input type="radio" class="btn-check" name="status" id="active" value="1" {{ old('status', 1) == 1 ? 'checked' : '' }}>
+                <label class="btn btn-outline-success me-2" for="active">
+                    <i class="bi bi-eye"></i> Hiển thị
+                </label>
+                <input type="radio" class="btn-check" name="status" id="inactive" value="0" {{ old('status', 1) == 0 ? 'checked' : '' }}>
+                <label class="btn btn-outline-danger" for="inactive">
+                    <i class="bi bi-eye-slash"></i> Ẩn
+                </label>
+                @error('status')
+                    <div class="text-danger small mt-1">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mt-4">
