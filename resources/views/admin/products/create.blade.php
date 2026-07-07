@@ -14,7 +14,7 @@
         
         <x-admin.alert />
 
-        <form action="{{ route('admin.products.store') }}" method="POST">
+        <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             
             <div class="mb-3">
@@ -99,6 +99,27 @@
                     </select>
                     @error('brandid')
                         <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+            <div class="row">
+                <div class="col-md-6 mb-3 img-group">
+                    <label for="img" class="form-label fw-bold">Hình ảnh chính</label>
+                    <input type="file" name="img" id="img" class="form-control img-input @error('img') is-invalid @enderror">
+                    <div class="img-preview mt-2"></div>
+                    @error('img')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                
+                <div class="col-md-6 mb-3 img-group">
+                    <label for="imgs" class="form-label fw-bold">Hình ảnh phụ</label>
+                    <input type="file" name="imgs[]" id="imgs" class="form-control img-input @error('imgs') is-invalid @enderror" multiple>
+                    <div class="img-preview mt-2"></div>
+                    @error('imgs')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                    @error('imgs.*')
+                        <div class="text-danger small mt-1">{{ $message }}</div>
                     @enderror
                 </div>
             </div>

@@ -40,10 +40,10 @@
             <td>{{ $item->category?->catename }}</td>
             <td>{{ $item->brand?->brandname ?? 'N/A' }}</td>
             <td>
-                @if($item->image && file_exists(public_path('images/' . $item->image)))
-                    <img src="{{ asset('images/' . $item->image) }}" alt="Image" width="50">
+                @if($item->image)
+                    <img src="{{ asset('storage/products/' . $item->image) }}" alt="{{ $item->productname }}" width="60" class="img-thumbnail">
                 @else
-                    <img src="{{ asset('images/default.png') }}" alt="Default" width="50">
+                    <img src="{{ asset('images/default.png') }}" alt="Default" width="60" class="img-thumbnail">
                 @endif
             </td>
             <td>

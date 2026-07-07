@@ -5,7 +5,7 @@ namespace App\Http\Requests\Admin;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class BrandRequest extends FormRequest
+class CategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -20,22 +20,20 @@ class BrandRequest extends FormRequest
      */
     public function rules(): array
     {
-        // lấy giá trị tham số id từ URL hiện tại
-        $id = $this->route('brand');
+        $id = $this->route('category');
         return [
-            'brandname' => [
+            'catename' => [
                 'required',
                 'min:3',
                 'max:100',
-                Rule::unique('brands', 'brandname')->ignore($id, 'id'),
+                Rule::unique('categories', 'catename')->ignore($id, 'cateid'),
             ],
             'slug' => [
                 'required',
-                'min:3',
+                'min:5',
                 'max:150',
-                Rule::unique('brands', 'slug')
-                    ->ignore($id, 'id'),
                 'regex:/^[a-z0-9-]+$/',
+                Rule::unique('categories', 'slug')->ignore($id, 'cateid'),
             ],
             'status' => 'required|in:0,1',
             'img' => [
@@ -65,10 +63,11 @@ class BrandRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'brandname' => 'Tên thương hiệu',
+            'catename' => 'Tên loại',
             'slug' => 'Đường dẫn (Slug)',
             'status' => 'Trạng thái',
             'img' => 'Hình ảnh',
         ];
     }
 }
+

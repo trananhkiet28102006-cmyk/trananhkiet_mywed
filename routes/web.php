@@ -26,6 +26,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('categories', CategoryController::class);
     Route::resource('brands', BrandController::class);
     Route::resource('products', ProductController::class);
+    Route::post('products/delete-image/{id}', [ProductController::class, 'deleteImage'])->name('products.delete-image');
     Route::resource('users', UserController::class);
     Route::resource('posts', PostController::class);
 });

@@ -5,8 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\Admin\ProductRequest; // Lab 09
-// use Illuminate\Support\Facades\DB; // Lab 06 - Query Builder
+use Illuminate\Support\Str; // Lab 10
+use Illuminate\Support\Facades\Storage; // Lab 10
 use App\Models\Product; // Lab 07 - Eloquent ORM
+use App\Models\ProductImage; // Lab 10
+use App\Models\Category; // Lab 10
+use App\Models\Brand; // Lab 10
 
 class ProductController extends Controller
 {
@@ -71,16 +75,46 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         try {
-            Product::create([
+            // Upload hình ảnh chính
+            $fileName = null;
+            if ($request->hasFile('img')) {
+                $file = $request->file('img');
+                $fileName = Str::slug($request->productname)
+                    . '-' . time()
+                    . '.' . $file->extension();
+                $file->storeAs('products', $fileName, 'public');
+            }
+
+            // Lưu sản phẩm
+            $product = Product::create([
                 'productname'   => $request->productname,
                 'slug'          => $request->slug,
                 'price'         => $request->price,
-                'pricediscount' => $request->input('pricediscount', 0),
+                'pricediscount' => $request->pricediscount ?? 0,
                 'description'   => $request->description,
-                'status'        => $request->input('status', 1),
+                'status'        => $request->status,
                 'cateid'        => $request->cateid,
                 'brandid'       => $request->brandid,
+                'image'         => $fileName,
             ]);
+
+            // Upload hình ảnh phụ
+            if ($request->hasFile('imgs')) {
+                $i = 1;
+                $time = time(); // cùng timestamp
+                foreach ($request->file('imgs') as $file) {
+                    $subFileName = $product->id . '_' . $time . '_' . $i . '.' . $file->extension();
+                    $file->storeAs('products', $subFileName, 'public');
+                    
+                    // Lưu vào bảng product_images
+                    ProductImage::create([
+                        'product_id' => $product->id,
+                        'image'      => $subFileName,
+                    ]);
+                    $i++;
+                }
+            }
+
             return redirect()->route('admin.products.index')->with('success', 'Thêm sản phẩm thành công!');
         } catch (\Exception $e) {
             return back()->withInput()->with('error', 'Lỗi thêm mới: ' . $e->getMessage());
@@ -100,12 +134,12 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        $product = Product::find($id);
-        $categories = \App\Models\Category::select('cateid', 'catename')
+        $product = Product::with('images')->findOrFail($id);
+        $categories = Category::select('cateid', 'catename')
             ->where('status', 1)
             ->orderBy('catename')
             ->get();
-        $brands = \App\Models\Brand::select('id', 'brandname')
+        $brands = Brand::select('id', 'brandname')
             ->where('status', 1)
             ->orderBy('brandname')
             ->get();
@@ -118,16 +152,49 @@ class ProductController extends Controller
     public function update(ProductRequest $request, string $id)
     {
         try {
-            Product::find($id)->update([
+            $product = Product::findOrFail($id);
+            $fileName = $product->image;
+
+            // Cập nhật ảnh chính (nếu có chọn ảnh mới)
+            if ($request->hasFile('img')) {
+                if ($fileName) {
+                    Storage::disk('public')->delete('products/' . $product->image);
+                }
+                $file = $request->file('img');
+                $fileName = Str::slug($request->productname)
+                    . '-' . time()
+                    . '.' . $file->extension();
+                $file->storeAs('products', $fileName, 'public');
+            }
+
+            $product->update([
                 'productname'   => $request->productname,
                 'slug'          => $request->slug,
                 'price'         => $request->price,
-                'pricediscount' => $request->input('pricediscount', 0),
+                'pricediscount' => $request->pricediscount ?? 0,
                 'description'   => $request->description,
-                'status'        => $request->input('status', 1),
+                'status'        => $request->status,
                 'cateid'        => $request->cateid,
                 'brandid'       => $request->brandid,
+                'image'         => $fileName,
             ]);
+
+            // Thêm các ảnh phụ mới (nếu có chọn thêm)
+            if ($request->hasFile('imgs')) {
+                $i = 1;
+                $time = time();
+                foreach ($request->file('imgs') as $file) {
+                    $subFileName = $product->id . '_' . $time . '_' . $i . '.' . $file->extension();
+                    $file->storeAs('products', $subFileName, 'public');
+
+                    ProductImage::create([
+                        'product_id' => $product->id,
+                        'image'      => $subFileName,
+                    ]);
+                    $i++;
+                }
+            }
+
             return redirect()->route('admin.products.index')->with('success', 'Sửa sản phẩm thành công!');
         } catch (\Exception $e) {
             return back()->withInput()->with('error', 'Lỗi cập nhật: ' . $e->getMessage());
@@ -140,5 +207,28 @@ class ProductController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    /**
+     * Delete secondary image via AJAX
+     */
+    public function deleteImage(string $id)
+    {
+        try {
+            $image = ProductImage::findOrFail($id);
+            if ($image->image) {
+                Storage::disk('public')->delete('products/' . $image->image);
+            }
+            $image->delete();
+            return response()->json([
+                'success' => true,
+                'message' => 'Xóa hình ảnh phụ thành công!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Lỗi: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }
