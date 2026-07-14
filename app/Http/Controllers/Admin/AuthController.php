@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use App\Models\User;
 
 class AuthController extends Controller
@@ -138,21 +140,48 @@ class AuthController extends Controller
     // Xử lý quên mật khẩu
     public function postForgotPassword(Request $request)
     {
+        // validate - kiểm tra dữ liệu đầu vào
         $request->validate(
             [
-                'email' => 'required|email|exists:users,email',
+                'email' => 'required|email',
             ],
             [
-                'required' => ':attribute không được để trống.',
-                'email' => ':attribute không hợp lệ.',
-                'exists' => ':attribute này không tồn tại trên hệ thống.',
-            ],
-            [
-                'email' => 'Email',
+                'email.required' => 'Email không được để trống',
+                'email.email' => 'Email không đúng định dạng',
             ]
         );
 
-        // Giả lập gửi email thành công
-        return back()->with('success', 'Đường dẫn khôi phục mật khẩu đã được gửi qua email của bạn!');
+        // Kiểm tra email tồn tại
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            return back()
+                ->with('error', 'Email không tồn tại')
+                ->withInput();
+        }
+
+        // Tạo mật khẩu mới
+        $passrandom = Str::random(10);
+        
+        // Mã hóa mật khẩu
+        $passencrypted = Hash::make($passrandom);
+        
+        // Lưu vào DB
+        $user->update([
+            'password' => $passencrypted
+        ]);
+
+        // Nội dung email
+        $html = "<h2>Mật khẩu mới của bạn là: $passrandom</h2>
+         <p>Vui lòng đổi mật khẩu sau khi đăng nhập.</p>";
+         
+        // Gửi email
+        Mail::html($html, function ($message) use ($request) {
+            $message->to($request->email)
+                ->subject('Đặt lại mật khẩu');
+        });
+
+        // Điều hướng về page forgot kèm thông báo (Đã sửa lỗi logic: dùng key 'success' thay vì 'message' để hiển thị Alert)
+        return back()
+            ->with('success', 'Đã gửi mật khẩu mới. Bạn vui lòng kiểm tra email của bạn');
     }
 }

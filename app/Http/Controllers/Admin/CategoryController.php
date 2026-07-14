@@ -140,14 +140,53 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        // ===================== LAB 06 - Query Builder =====================
-        // DB::table('categories')->where('cateid', $id)->delete();
-        // ==================================================================
+        try {
+            Category::findOrFail($id)->delete();
+            return redirect()
+                ->route('admin.categories.index')
+                ->with('success', 'Xóa mềm danh mục thành công.');
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Thực hiện xóa mềm thất bại: ' . $e->getMessage());
+        }
+    }
 
-        // ===================== LAB 07 - Eloquent ORM =====================
-        Category::destroy($id);
-        // =================================================================
+    // Hiển thị danh sách các bản ghi đã xóa mềm (Thùng rác)
+    public function trash(Request $request)
+    {
+        $limit = $request->input('limit', 10);
+        $list = Category::onlyTrashed()->orderBy('catename')->paginate($limit);
+        return view('admin.categories.trash', compact('list'));
+    }
 
-        return redirect()->route('admin.categories.index');
+    // Khôi phục dữ liệu đã xóa mềm
+    public function restore($id)
+    {
+        try {
+            Category::onlyTrashed()->findOrFail($id)->restore();
+            return redirect()
+                ->route('admin.categories.trash')
+                ->with('success', 'Khôi phục danh mục thành công.');
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Khôi phục thất bại.');
+        }
+    }
+
+    // Xóa vĩnh viễn dữ liệu khỏi cơ sở dữ liệu
+    public function forceDelete($id)
+    {
+        try {
+            Category::onlyTrashed()->findOrFail($id)->forceDelete();
+            return redirect()
+                ->route('admin.categories.trash')
+                ->with('success', 'Xóa vĩnh viễn danh mục thành công.');
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Xóa vĩnh viễn thất bại.');
+        }
     }
 }

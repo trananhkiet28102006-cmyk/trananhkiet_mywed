@@ -35,11 +35,27 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/change-password', [AuthController::class, 'changePassword'])->name('change-password');
         Route::post('/change-password', [AuthController::class, 'postChangePassword'])->name('change-password.post');
 
-        Route::resource('categories', CategoryController::class);
-        Route::resource('brands', BrandController::class);
-        Route::resource('products', ProductController::class);
-        Route::post('products/delete-image/{id}', [ProductController::class, 'deleteImage'])->name('products.delete-image');
-        Route::resource('users', UserController::class);
-        Route::resource('posts', PostController::class);
+        // Các tuyến đường chỉ dành cho Admin (role = 1)
+        Route::middleware('roles:1')->group(function () {
+            // Thùng rác và khôi phục của Categories
+            Route::get('trash/categories', [CategoryController::class, 'trash'])->name('categories.trash');
+            Route::patch('categories/{id}/restore', [CategoryController::class, 'restore'])->name('categories.restore');
+            Route::delete('categories/{id}/forcedelete', [CategoryController::class, 'forceDelete'])->name('categories.forceDelete');
+
+            Route::resource('categories', CategoryController::class);
+            Route::resource('brands', BrandController::class);
+            Route::resource('users', UserController::class);
+            Route::resource('posts', PostController::class);
+
+            // Các hành động thay đổi sản phẩm (Create, Store, Edit, Update, Destroy)
+            Route::resource('products', ProductController::class)->except(['index']);
+            Route::post('products/delete-image/{id}', [ProductController::class, 'deleteImage'])->name('products.delete-image');
+        });
+
+        // Nhân viên (role = 2) và Admin (role = 1) đều được phép xem danh sách sản phẩm
+        Route::resource('products', ProductController::class)->only(['index'])->middleware('roles:1,2');
     });
+});
+Route::get('/test-500', function () {
+    abort(500);
 });

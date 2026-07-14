@@ -1,19 +1,13 @@
-{{-- Thừa kế layout/view admin.blade.php --}}
 @extends('admin.layouts.admin')
 
-{{-- Gán nội dung cho vùng section 'title' --}}
-@section('title', 'Loại Sản phẩm')
+@section('title', 'Trash - Loại Sản phẩm')
 
-{{-- Gán nội dung cho vùng section 'content' --}}
 @section('content')
-<h2 class="mb-3">DANH SÁCH LOẠI SẢN PHẨM</h2>
+<h2 class="mb-3">DANH SÁCH LOẠI SẢN PHẨM - THÙNG RÁC</h2>
 
-<div class="mb-3 d-flex gap-2">
-    <a href="{{ route('admin.categories.create') }}" class="btn btn-success">
-        <i class="bi bi-plus-lg"></i> Thêm mới
-    </a>
-    <a href="{{ route('admin.categories.trash') }}" class="btn btn-secondary">
-        <i class="bi bi-trash-fill"></i> Thùng rác
+<div class="mb-3">
+    <a href="{{ route('admin.categories.index') }}" class="btn btn-primary">
+        <i class="bi bi-arrow-left"></i> Quay lại danh sách
     </a>
 </div>
 
@@ -32,7 +26,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach($list as $index => $item)
+        @forelse($list as $index => $item)
         <tr>
             <td>{{ ($list->currentPage() - 1) * $list->perPage() + $index + 1 }}</td>
             <td>{{ $item->cateid }}</td>
@@ -54,20 +48,31 @@
             </td>
             <td>
                 <div class="d-flex gap-1">
-                    <a href="{{ route('admin.categories.edit', $item->cateid) }}" class="btn btn-warning btn-sm">
-                        <i class="bi bi-pencil-square"></i> Sửa
-                    </a>
-                    <form action="{{ route('admin.categories.destroy', $item->cateid) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa loại sản phẩm này?')">
+                    {{-- Khôi phục --}}
+                    <form action="{{ route('admin.categories.restore', $item->cateid) }}" method="POST" class="d-inline">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="btn btn-success btn-sm">
+                            <i class="bi bi-arrow-counterclockwise"></i> Khôi phục
+                        </button>
+                    </form>
+
+                    {{-- Xóa vĩnh viễn --}}
+                    <form action="{{ route('admin.categories.forceDelete', $item->cateid) }}" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa vĩnh viễn loại sản phẩm này? Thao tác này không thể hoàn tác!')">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger btn-sm">
-                            <i class="bi bi-trash"></i> Xóa
+                            <i class="bi bi-trash"></i> Xóa vĩnh viễn
                         </button>
                     </form>
                 </div>
             </td>
         </tr>
-        @endforeach
+        @empty
+        <tr>
+            <td colspan="7" class="text-center text-muted">Thùng rác trống.</td>
+        </tr>
+        @endforelse
     </tbody>
 </table>
 
