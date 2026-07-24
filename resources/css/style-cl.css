@@ -1,0 +1,743 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --primary: #6366f1;
+    --primary-hover: #4f46e5;
+    --primary-light: #e0e7ff;
+    --secondary: #ec4899;
+    --accent: #f43f5e;
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 10px 25px -5px rgba(99, 102, 241, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+    --shadow-lg: 0 20px 35px -10px rgba(15, 23, 42, 0.15);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================================================
+   1. QUY TẮC DÙNG CHUNG CHO CẢ SÁNG & TỐI (LAYOUT & BUTTONS ĐỒNG BỘ 100%)
+   ========================================================================== */
+body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.6;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Top Announcement Bar */
+.top-announcement {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #ec4899 100%);
+    color: #ffffff !important;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 6px 0;
+}
+
+/* Glassmorphism Navbar */
+.navbar-glass {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    transition: var(--transition);
+}
+
+.navbar-brand-logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #4f46e5 0%, #ec4899 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+}
+
+/* Nav Links Bo tròn Pill Không Bị Xuống Dòng */
+.nav-link {
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    padding: 8px 18px !important;
+    border-radius: 50px !important;
+    white-space: nowrap !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    transition: var(--transition);
+}
+
+.dropdown-menu {
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    padding: 8px;
+}
+
+.dropdown-item {
+    border-radius: var(--radius-sm);
+    padding: 8px 14px;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+/* Search input */
+.search-input-group {
+    border-radius: 50px;
+    padding: 2px 6px 2px 16px;
+    transition: var(--transition);
+}
+
+.search-input-group input {
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 0.9rem;
+}
+
+.btn-search {
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%) !important;
+    color: white !important;
+    border-radius: 50px !important;
+    padding: 6px 18px;
+    font-weight: 600;
+    border: none;
+    box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+}
+
+/* Cart Button Badge */
+.btn-cart-nav {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white !important;
+    border-radius: 50px;
+    padding: 8px 20px;
+    font-weight: 600;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+    border: none;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.badge-cart-count {
+    background-color: #ffffff;
+    color: #059669;
+    font-weight: 800;
+    font-size: 0.8rem;
+    padding: 3px 8px;
+    border-radius: 50px;
+}
+
+/* Theme Toggle Button */
+.btn-theme-toggle {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 1.1rem;
+    margin-right: 8px;
+}
+
+/* Hero Banner Section */
+.hero-banner {
+    border-radius: var(--radius-lg);
+    padding: 60px 40px;
+    margin-bottom: 40px;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+.hero-title {
+    font-size: 2.8rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+.hero-subtitle {
+    font-size: 1.15rem;
+    margin-bottom: 30px;
+}
+
+/* Nút Hero chính */
+.btn-hero {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%) !important;
+    color: white !important;
+    font-weight: 700;
+    padding: 12px 28px;
+    border-radius: 50px;
+    border: none;
+    box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* Nút Hero phụ */
+.btn-hero-secondary {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    font-weight: 700;
+    padding: 12px 28px;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: var(--transition);
+}
+
+/* Feature Boxes */
+.feature-card {
+    border-radius: var(--radius-md);
+    padding: 24px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: var(--transition);
+}
+
+.feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.feature-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: #e0e7ff;
+    color: #6366f1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+/* Section Header */
+.section-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-subtitle {
+    font-size: 0.95rem;
+    margin-bottom: 28px;
+}
+
+/* Product Card Styling */
+.product-card {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(99, 102, 241, 0.4) !important;
+}
+
+.product-badge-sale {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    background: linear-gradient(135deg, #ef4444 0%, #f43f5e 100%);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 50px;
+    z-index: 2;
+}
+
+.product-img-wrapper {
+    position: relative;
+    width: 100%;
+    padding-top: 80%;
+    overflow: hidden;
+}
+
+.product-img-wrapper img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.product-card:hover .product-img-wrapper img {
+    transform: scale(1.08);
+}
+
+.product-details {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.product-category-name {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #6366f1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+}
+
+.product-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.4;
+    margin-bottom: 12px;
+}
+
+.product-title a {
+    text-decoration: none;
+}
+
+.product-price-current {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #ef4444;
+}
+
+.product-price-old {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    text-decoration: line-through;
+    margin-left: 8px;
+}
+
+.btn-add-cart-card {
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: var(--transition);
+}
+
+.btn-view-detail-card {
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    width: 100%;
+    text-decoration: none;
+    text-align: center;
+    display: block;
+    transition: var(--transition);
+}
+
+/* Footer Styling */
+.footer-dark {
+    padding-top: 60px;
+    padding-bottom: 30px;
+    transition: var(--transition);
+}
+
+.footer-heading {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    margin-bottom: 12px;
+}
+
+/* Pagination Styling */
+.pagination {
+    gap: 6px;
+}
+
+.pagination .page-item .page-link {
+    border-radius: 50px !important;
+    padding: 8px 16px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #1e293b;
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1;
+    transition: var(--transition);
+}
+
+.pagination .page-item .page-link:hover {
+    background-color: #e0e7ff;
+    color: #4f46e5;
+    border-color: #818cf8;
+}
+
+.pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%) !important;
+    color: #ffffff !important;
+    border-color: #4f46e5 !important;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+}
+
+.pagination .page-item.disabled .page-link {
+    background-color: #f1f5f9;
+    color: #94a3b8;
+    border-color: #e2e8f0;
+}
+
+/* Khối Giá Chi Tiết Sản Phẩm */
+.product-detail-price-box {
+    background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%) !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+/* ==========================================================================
+   2. BỘ MÀU CHÍNH XÁC CHO GIAO DIỆN SÁNG (LIGHT MODE)
+   ========================================================================== */
+html:not([data-theme="dark"]),
+html:not([data-theme="dark"]) body {
+    background-color: #f8fafc !important;
+    color: #0f172a !important;
+}
+
+html:not([data-theme="dark"]) .navbar-glass {
+    background: rgba(255, 255, 255, 0.96) !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+
+html:not([data-theme="dark"]) .nav-link {
+    color: #1e293b !important;
+}
+
+html:not([data-theme="dark"]) .nav-link:hover,
+html:not([data-theme="dark"]) .nav-link.active {
+    color: #4f46e5 !important;
+    background-color: #e0e7ff !important;
+}
+
+html:not([data-theme="dark"]) .dropdown-menu {
+    background-color: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+html:not([data-theme="dark"]) .dropdown-item {
+    color: #1e293b !important;
+}
+
+html:not([data-theme="dark"]) .dropdown-item:hover {
+    background-color: #e0e7ff !important;
+    color: #4f46e5 !important;
+}
+
+html:not([data-theme="dark"]) .search-input-group {
+    background-color: #f1f5f9 !important;
+    border: 1px solid #cbd5e1 !important;
+}
+
+html:not([data-theme="dark"]) .search-input-group input {
+    color: #0f172a !important;
+}
+
+html:not([data-theme="dark"]) .search-input-group input::placeholder,
+html:not([data-theme="dark"]) .form-control::placeholder {
+    color: #64748b !important;
+    opacity: 0.9 !important;
+}
+
+html:not([data-theme="dark"]) .btn-theme-toggle {
+    border: 1px solid #cbd5e1 !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+}
+
+html:not([data-theme="dark"]) .hero-banner {
+    background: linear-gradient(135deg, #e0e7ff 0%, #eef2ff 50%, #fae8ff 100%) !important;
+    color: #0f172a !important;
+    border: 1px solid #cbd5e1 !important;
+}
+
+html:not([data-theme="dark"]) .hero-title {
+    background: linear-gradient(135deg, #0f172a 0%, #4338ca 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+html:not([data-theme="dark"]) .hero-subtitle {
+    color: #475569 !important;
+}
+
+html:not([data-theme="dark"]) .btn-hero-secondary {
+    background: #ffffff !important;
+    color: #1e293b !important;
+    border: 1px solid #cbd5e1 !important;
+}
+
+html:not([data-theme="dark"]) .bg-white,
+html:not([data-theme="dark"]) .bg-light,
+html:not([data-theme="dark"]) .card,
+html:not([data-theme="dark"]) .feature-card,
+html:not([data-theme="dark"]) .product-card,
+html:not([data-theme="dark"]) .breadcrumb {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+html:not([data-theme="dark"]) .text-dark,
+html:not([data-theme="dark"]) h1, html:not([data-theme="dark"]) h2, html:not([data-theme="dark"]) h3,
+html:not([data-theme="dark"]) h4, html:not([data-theme="dark"]) h5, html:not([data-theme="dark"]) h6,
+html:not([data-theme="dark"]) .product-title a {
+    color: #0f172a !important;
+}
+
+html:not([data-theme="dark"]) .text-muted,
+html:not([data-theme="dark"]) .section-subtitle {
+    color: #475569 !important;
+}
+
+html:not([data-theme="dark"]) .product-img-wrapper {
+    background-color: #f8fafc !important;
+}
+
+html:not([data-theme="dark"]) .btn-view-detail-card {
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
+}
+
+html:not([data-theme="dark"]) .btn-add-cart-card {
+    background: #0f172a !important;
+    color: #ffffff !important;
+}
+
+html:not([data-theme="dark"]) .footer-dark {
+    background: #f1f5f9 !important;
+    color: #475569 !important;
+    border-top: 1px solid #e2e8f0 !important;
+}
+
+html:not([data-theme="dark"]) .footer-heading {
+    color: #0f172a !important;
+}
+
+html:not([data-theme="dark"]) .footer-links a {
+    color: #475569 !important;
+}
+
+/* ==========================================================================
+   3. BỘ MÀU CHÍNH XÁC CHO GIAO DIỆN TỐI (DARK MODE)
+   ========================================================================== */
+html[data-theme="dark"],
+html[data-theme="dark"] body {
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+}
+
+html[data-theme="dark"] .navbar-glass {
+    background: rgba(15, 23, 42, 0.95) !important;
+    border-bottom: 1px solid #1e293b !important;
+}
+
+html[data-theme="dark"] .nav-link {
+    color: #f8fafc !important;
+    background-color: transparent !important;
+    border: 1px solid transparent !important;
+}
+
+html[data-theme="dark"] .nav-link:hover,
+html[data-theme="dark"] .nav-link.active {
+    color: #ffffff !important;
+    background-color: #1e293b !important;
+    border: 1px solid #334155 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+html[data-theme="dark"] .dropdown-menu {
+    background-color: #1e293b !important;
+    border: 1px solid #334155 !important;
+}
+
+html[data-theme="dark"] .dropdown-item {
+    color: #cbd5e1 !important;
+}
+
+html[data-theme="dark"] .dropdown-item:hover {
+    background-color: #334155 !important;
+    color: #ffffff !important;
+}
+
+html[data-theme="dark"] .search-input-group {
+    background-color: #1e293b !important;
+    border: 1px solid #334155 !important;
+}
+
+html[data-theme="dark"] .search-input-group input {
+    color: #ffffff !important;
+}
+
+html[data-theme="dark"] .search-input-group input::placeholder,
+html[data-theme="dark"] .form-control::placeholder {
+    color: #e2e8f0 !important;
+    opacity: 0.9 !important;
+}
+
+html[data-theme="dark"] .btn-theme-toggle {
+    background-color: #1e293b !important;
+    color: #f8fafc !important;
+    border: 1px solid #334155 !important;
+}
+
+html[data-theme="dark"] .hero-banner {
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%) !important;
+    color: #ffffff !important;
+    border: 1px solid #334155 !important;
+}
+
+html[data-theme="dark"] .hero-title {
+    background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+html[data-theme="dark"] .hero-subtitle {
+    color: #94a3b8 !important;
+}
+
+html[data-theme="dark"] .btn-hero-secondary {
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+html[data-theme="dark"] .bg-white,
+html[data-theme="dark"] .bg-light,
+html[data-theme="dark"] .card,
+html[data-theme="dark"] .feature-card,
+html[data-theme="dark"] .product-card,
+html[data-theme="dark"] .breadcrumb {
+    background-color: #1e293b !important;
+    color: #f8fafc !important;
+    border: 1px solid #334155 !important;
+}
+
+html[data-theme="dark"] .product-detail-price-box {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+    border: 1px solid #334155 !important;
+    color: #f8fafc !important;
+}
+
+html[data-theme="dark"] .product-detail-price-box .text-muted {
+    color: #cbd5e1 !important;
+}
+
+html[data-theme="dark"] .product-detail-price-box .text-success {
+    color: #34d399 !important;
+}
+
+html[data-theme="dark"] .text-dark,
+html[data-theme="dark"] h1, html[data-theme="dark"] h2, html[data-theme="dark"] h3,
+html[data-theme="dark"] h4, html[data-theme="dark"] h5, html[data-theme="dark"] h6,
+html[data-theme="dark"] .product-title a {
+    color: #f8fafc !important;
+}
+
+html[data-theme="dark"] .text-muted,
+html[data-theme="dark"] .section-subtitle {
+    color: #cbd5e1 !important;
+}
+
+html[data-theme="dark"] .feature-icon {
+    background-color: #1e1b4b !important;
+    color: #818cf8 !important;
+}
+
+html[data-theme="dark"] .product-img-wrapper {
+    background-color: #0f172a !important;
+}
+
+html[data-theme="dark"] .btn-view-detail-card {
+    background-color: #334155 !important;
+    color: #f8fafc !important;
+}
+
+html[data-theme="dark"] .btn-view-detail-card:hover {
+    background-color: #475569 !important;
+}
+
+html[data-theme="dark"] .btn-add-cart-card {
+    background: #6366f1 !important;
+    color: #ffffff !important;
+}
+
+html[data-theme="dark"] .form-control,
+html[data-theme="dark"] .form-select {
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+    border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .footer-dark {
+    background: #0f172a !important;
+    color: #94a3b8 !important;
+    border-top: 1px solid #1e293b !important;
+}
+
+html[data-theme="dark"] .footer-heading {
+    color: #ffffff !important;
+}
+
+html[data-theme="dark"] .footer-links a {
+    color: #94a3b8 !important;
+}
+
+html[data-theme="dark"] .footer-links a:hover {
+    color: #ffffff !important;
+}
+
+/* Dark Mode Pagination Overrides */
+html[data-theme="dark"] .pagination .page-item .page-link {
+    background-color: #1e293b !important;
+    color: #f8fafc !important;
+    border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .pagination .page-item .page-link:hover {
+    background-color: #334155 !important;
+    color: #818cf8 !important;
+}
+
+html[data-theme="dark"] .pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%) !important;
+    color: #ffffff !important;
+    border-color: #6366f1 !important;
+}
+
+html[data-theme="dark"] .pagination .page-item.disabled .page-link {
+    background-color: #0f172a !important;
+    color: #64748b !important;
+    border-color: #1e293b !important;
+}

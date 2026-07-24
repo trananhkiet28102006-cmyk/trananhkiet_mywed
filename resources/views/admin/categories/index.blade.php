@@ -40,7 +40,7 @@
             <td>{{ $item->slug }}</td>
             <td>
                 @if($item->image)
-                    <img src="{{ asset('storage/categories/' . $item->image) }}" alt="{{ $item->catename }}" width="60" class="img-thumbnail">
+                    <img src="{{ str_starts_with($item->image, 'http') ? $item->image : asset('storage/categories/' . $item->image) }}" alt="{{ $item->catename }}" width="60" class="img-thumbnail">
                 @else
                     <img src="{{ asset('images/default.png') }}" alt="Default" width="60" class="img-thumbnail">
                 @endif

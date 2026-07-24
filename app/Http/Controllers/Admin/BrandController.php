@@ -138,6 +138,42 @@ class BrandController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            Brand::findOrFail($id)->delete();
+            return redirect()->route('admin.brands.index')->with('success', 'Xóa mềm thương hiệu thành công.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Thực hiện xóa mềm thất bại: ' . $e->getMessage());
+        }
+    }
+
+    public function trash(Request $request)
+    {
+        $limit = $request->input('limit', 10);
+        $list = Brand::onlyTrashed()->orderBy('brandname')->paginate($limit);
+        return view('admin.brands.trash', compact('list'));
+    }
+
+    public function restore($id)
+    {
+        try {
+            Brand::onlyTrashed()->findOrFail($id)->restore();
+            return redirect()->route('admin.brands.trash')->with('success', 'Khôi phục thương hiệu thành công.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Khôi phục thất bại: ' . $e->getMessage());
+        }
+    }
+
+    public function forceDelete($id)
+    {
+        try {
+            $brand = Brand::onlyTrashed()->findOrFail($id);
+            if ($brand->image) {
+                Storage::disk('public')->delete('brands/' . $brand->image);
+            }
+            $brand->forceDelete();
+            return redirect()->route('admin.brands.trash')->with('success', 'Xóa vĩnh viễn thương hiệu thành công.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Xóa vĩnh viễn thất bại: ' . $e->getMessage());
+        }
     }
 }

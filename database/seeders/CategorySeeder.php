@@ -2,28 +2,32 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class CategorySeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        for ($i = 1; $i <= 10; $i++) {
-            $name = fake()->unique()->words(3, true);
+        $categories = [
+            ['catename' => 'Điện thoại', 'description' => 'Các dòng điện thoại thông minh chính hãng mới nhất'],
+            ['catename' => 'Laptop', 'description' => 'Máy tính xách tay văn phòng, đồ họa và gaming'],
+            ['catename' => 'Máy tính bảng', 'description' => 'Tablet phục vụ học tập, làm việc và giải trí'],
+            ['catename' => 'Đồng hồ thông minh', 'description' => 'Smartwatch theo dõi sức khỏe và thể thao'],
+            ['catename' => 'Tai nghe & Âm thanh', 'description' => 'Tai nghe Bluetooth, loa máy tính chính hãng'],
+            ['catename' => 'Phụ kiện công nghệ', 'description' => 'Sạc dự phòng, cáp sạc, ốp lưng, bàn phím, chuột'],
+        ];
+
+        foreach ($categories as $index => $cat) {
             DB::table('categories')->insert([
-                'catename' => ucfirst($name),
-                'slug' => Str::slug($name),
-                'status' => fake()->numberBetween(0, 1),
-                'sort_order' => $i,
-                'description' => fake()->sentence(30),
-                'created_at' => now(),
-                'updated_at' => now()
+                'catename'    => $cat['catename'],
+                'slug'        => Str::slug($cat['catename']),
+                'status'      => 1,
+                'sort_order'  => $index + 1,
+                'description' => $cat['description'],
+                'created_at'  => now(),
+                'updated_at'  => now()
             ]);
         }
     }

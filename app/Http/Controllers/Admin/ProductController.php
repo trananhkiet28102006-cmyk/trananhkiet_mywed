@@ -206,7 +206,48 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            Product::findOrFail($id)->delete();
+            return redirect()->route('admin.products.index')->with('success', 'Xóa mềm sản phẩm thành công.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Thực hiện xóa mềm thất bại: ' . $e->getMessage());
+        }
+    }
+
+    public function trash(Request $request)
+    {
+        $limit = $request->input('limit', 10);
+        $list = Product::onlyTrashed()->with(['category', 'brand'])->orderBy('productname')->paginate($limit);
+        return view('admin.products.trash', compact('list'));
+    }
+
+    public function restore($id)
+    {
+        try {
+            Product::onlyTrashed()->findOrFail($id)->restore();
+            return redirect()->route('admin.products.trash')->with('success', 'Khôi phục sản phẩm thành công.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Khôi phục thất bại: ' . $e->getMessage());
+        }
+    }
+
+    public function forceDelete($id)
+    {
+        try {
+            $product = Product::onlyTrashed()->with('images')->findOrFail($id);
+            if ($product->image) {
+                Storage::disk('public')->delete('products/' . $product->image);
+            }
+            foreach ($product->images as $img) {
+                if ($img->image) {
+                    Storage::disk('public')->delete('products/' . $img->image);
+                }
+            }
+            $product->forceDelete();
+            return redirect()->route('admin.products.trash')->with('success', 'Xóa vĩnh viễn sản phẩm thành công.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Xóa vĩnh viễn thất bại: ' . $e->getMessage());
+        }
     }
 
     /**

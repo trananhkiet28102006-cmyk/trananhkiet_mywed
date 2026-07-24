@@ -8,9 +8,14 @@
 @section('content')
 <h2 class="mb-3">DANH SÁCH SẢN PHẨM</h2>
 
-<a href="{{ route('admin.products.create') }}" class="btn btn-success mb-3">
-    <i class="bi bi-plus-lg"></i> Thêm mới
-</a>
+<div class="mb-3 d-flex gap-2">
+    <a href="{{ route('admin.products.create') }}" class="btn btn-success">
+        <i class="bi bi-plus-lg"></i> Thêm mới
+    </a>
+    <a href="{{ route('admin.products.trash') }}" class="btn btn-secondary">
+        <i class="bi bi-trash-fill"></i> Thùng rác
+    </a>
+</div>
 
 <x-admin.alert />
 
@@ -41,7 +46,7 @@
             <td>{{ $item->brand?->brandname ?? 'N/A' }}</td>
             <td>
                 @if($item->image)
-                    <img src="{{ asset('storage/products/' . $item->image) }}" alt="{{ $item->productname }}" width="60" class="img-thumbnail">
+                    <img src="{{ str_starts_with($item->image, 'http') ? $item->image : asset('storage/products/' . $item->image) }}" alt="{{ $item->productname }}" width="60" class="img-thumbnail">
                 @else
                     <img src="{{ asset('images/default.png') }}" alt="Default" width="60" class="img-thumbnail">
                 @endif
@@ -54,9 +59,18 @@
                 @endif
             </td>
             <td>
-                <a href="{{ route('admin.products.edit', $item->id) }}" class="btn btn-warning btn-sm">
-                    <i class="bi bi-pencil-square"></i> Sửa
-                </a>
+                <div class="d-flex gap-1">
+                    <a href="{{ route('admin.products.edit', $item->id) }}" class="btn btn-warning btn-sm">
+                        <i class="bi bi-pencil-square"></i> Sửa
+                    </a>
+                    <form action="{{ route('admin.products.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash"></i> Xóa
+                        </button>
+                    </form>
+                </div>
             </td>
         </tr>
         @endforeach

@@ -8,9 +8,14 @@
 @section('content')
 <h2 class="mb-3">DANH SÁCH BÀI VIẾT</h2>
 
-<a href="{{ route('admin.posts.create') }}" class="btn btn-success mb-3">
-    <i class="bi bi-plus-lg"></i> Thêm mới
-</a>
+<div class="mb-3 d-flex gap-2">
+    <a href="{{ route('admin.posts.create') }}" class="btn btn-success">
+        <i class="bi bi-plus-lg"></i> Thêm mới
+    </a>
+    <a href="{{ route('admin.posts.trash') }}" class="btn btn-secondary">
+        <i class="bi bi-trash-fill"></i> Thùng rác
+    </a>
+</div>
 
 <x-admin.alert />
 
@@ -34,10 +39,10 @@
             <td>{{ $item->title }}</td>
             <td>{{ $item->user?->fullname }}</td>
             <td>
-                @if($item->image && file_exists(public_path('images/' . $item->image)))
-                    <img src="{{ asset('images/' . $item->image) }}" alt="Image" width="60">
+                @if($item->image)
+                    <img src="{{ str_starts_with($item->image, 'http') ? $item->image : asset('images/' . $item->image) }}" alt="Image" width="60" class="img-thumbnail">
                 @else
-                    <img src="{{ asset('images/default.png') }}" alt="Default" width="60">
+                    <img src="{{ asset('images/default.png') }}" alt="Default" width="60" class="img-thumbnail">
                 @endif
             </td>
             <td>
@@ -48,9 +53,18 @@
                 @endif
             </td>
             <td>
-                <a href="{{ route('admin.posts.edit', $item->id) }}" class="btn btn-warning btn-sm">
-                    <i class="bi bi-pencil-square"></i> Sửa
-                </a>
+                <div class="d-flex gap-1">
+                    <a href="{{ route('admin.posts.edit', $item->id) }}" class="btn btn-warning btn-sm">
+                        <i class="bi bi-pencil-square"></i> Sửa
+                    </a>
+                    <form action="{{ route('admin.posts.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa bài viết này?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash"></i> Xóa
+                        </button>
+                    </form>
+                </div>
             </td>
         </tr>
         @endforeach

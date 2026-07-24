@@ -122,6 +122,41 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            if (auth()->id() == $id) {
+                return redirect()->back()->with('error', 'Bạn không thể tự xóa tài khoản của chính mình.');
+            }
+            User::findOrFail($id)->delete();
+            return redirect()->route('admin.users.index')->with('success', 'Xóa mềm người dùng thành công.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Thực hiện xóa mềm thất bại: ' . $e->getMessage());
+        }
+    }
+
+    public function trash(Request $request)
+    {
+        $limit = $request->input('limit', 10);
+        $list = User::onlyTrashed()->orderBy('fullname')->paginate($limit);
+        return view('admin.users.trash', compact('list'));
+    }
+
+    public function restore($id)
+    {
+        try {
+            User::onlyTrashed()->findOrFail($id)->restore();
+            return redirect()->route('admin.users.trash')->with('success', 'Khôi phục người dùng thành công.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Khôi phục thất bại: ' . $e->getMessage());
+        }
+    }
+
+    public function forceDelete($id)
+    {
+        try {
+            User::onlyTrashed()->findOrFail($id)->forceDelete();
+            return redirect()->route('admin.users.trash')->with('success', 'Xóa vĩnh viễn người dùng thành công.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Xóa vĩnh viễn thất bại: ' . $e->getMessage());
+        }
     }
 }

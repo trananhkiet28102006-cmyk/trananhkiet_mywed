@@ -119,6 +119,42 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            Post::findOrFail($id)->delete();
+            return redirect()->route('admin.posts.index')->with('success', 'Xóa mềm bài viết thành công.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Thực hiện xóa mềm thất bại: ' . $e->getMessage());
+        }
+    }
+
+    public function trash(Request $request)
+    {
+        $limit = $request->input('limit', 10);
+        $list = Post::onlyTrashed()->with('user')->orderBy('title')->paginate($limit);
+        return view('admin.posts.trash', compact('list'));
+    }
+
+    public function restore($id)
+    {
+        try {
+            Post::onlyTrashed()->findOrFail($id)->restore();
+            return redirect()->route('admin.posts.trash')->with('success', 'Khôi phục bài viết thành công.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Khôi phục thất bại: ' . $e->getMessage());
+        }
+    }
+
+    public function forceDelete($id)
+    {
+        try {
+            $post = Post::onlyTrashed()->findOrFail($id);
+            if ($post->image && file_exists(public_path('images/' . $post->image))) {
+                @unlink(public_path('images/' . $post->image));
+            }
+            $post->forceDelete();
+            return redirect()->route('admin.posts.trash')->with('success', 'Xóa vĩnh viễn bài viết thành công.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Xóa vĩnh viễn thất bại: ' . $e->getMessage());
+        }
     }
 }
