@@ -75,6 +75,12 @@
                         <i class="bi bi-journal-text me-1"></i> Tin tức
                     </a> 
                 </li>
+
+                <li class="nav-item"> 
+                    <a class="nav-link {{ request()->routeIs('orders.history') ? 'active' : '' }}" href="{{ route('orders.history') }}">
+                        <i class="bi bi-clock-history me-1"></i> Tra cứu đơn hàng
+                    </a> 
+                </li>
             </ul> 
  
             {{-- Tìm kiếm --}} 

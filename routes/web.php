@@ -16,6 +16,7 @@ use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\ProductController as ClientProductController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\PostController as ClientPostController;
+use App\Http\Controllers\Client\OrderHistoryController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/products/{slug}', [ClientProductController::class, 'show'])->name('products.show');
@@ -26,6 +27,10 @@ Route::get('/search', [ClientProductController::class, 'search'])->name('product
 // Tin Tức phía Client
 Route::get('/posts', [ClientPostController::class, 'index'])->name('posts.index');
 Route::get('/posts/{slug}', [ClientPostController::class, 'show'])->name('posts.show');
+
+// Tra cứu & Theo dõi Đơn hàng Thời Gian Thực (Real-Time Order Tracking)
+Route::get('/orders/history', [OrderHistoryController::class, 'history'])->name('orders.history');
+Route::get('/orders/status-check/{id}', [OrderHistoryController::class, 'checkStatus'])->name('orders.checkStatus');
 
 Route::prefix('cart')->controller(CartController::class)->name('cart.')->group(function () { 
     Route::get('/show', 'show')->name('show'); 
