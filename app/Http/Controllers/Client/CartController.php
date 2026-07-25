@@ -86,10 +86,17 @@ class CartController extends Controller
         // Validate dữ liệu khách nhận hàng
         $request->validate([
             'fullname' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
-            'email' => 'nullable|email|max:255',
-            'address' => 'required|string|max:500',
-            'note' => 'nullable|string|max:1000',
+            'phone'    => ['required', 'string', 'regex:/^(0)[0-9]{9,10}$/'],
+            'email'    => 'nullable|email|max:255',
+            'address'  => 'required|string|max:500',
+            'note'     => 'nullable|string|max:1000',
+        ], [
+            'fullname.required' => 'Vui lòng nhập Họ và tên người nhận!',
+            'fullname.max'      => 'Họ và tên không được dài quá 255 ký tự!',
+            'phone.required'    => 'Vui lòng nhập Số điện thoại liên hệ!',
+            'phone.regex'       => 'Số điện thoại không hợp lệ (ví dụ: 0901234567 từ 10-11 chữ số)!',
+            'email.email'       => 'Địa chỉ Email không đúng định dạng (ví dụ: name@gmail.com)!',
+            'address.required'  => 'Vui lòng nhập Địa chỉ giao hàng chi tiết!',
         ]);
 
         // Lấy giỏ hàng từ Session

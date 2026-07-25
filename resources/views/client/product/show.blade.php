@@ -19,16 +19,45 @@
     <div class="row bg-white p-4 p-md-5 rounded-4 shadow-sm g-4 border border-light">
         {{-- Product Image --}}
         <div class="col-lg-5 text-center">
-            <div class="p-3 bg-light rounded-4 border position-relative overflow-hidden">
+            <div class="p-3 bg-light rounded-4 border position-relative overflow-hidden mb-3">
                 @if ($product->pricediscount > 0 && $product->price > $product->pricediscount)
                     <span class="position-absolute top-0 start-0 m-3 badge bg-danger fs-6 px-3 py-2 rounded-pill shadow">
                         <i class="bi bi-lightning-fill me-1"></i>GIẢM {{ round((($product->price - $product->pricediscount) / $product->price) * 100) }}%
                     </span>
                 @endif
-                <img src="{{ asset(str_starts_with($product->image, 'http') ? $product->image : (str_contains($product->image, 'storage') ? $product->image : 'storage/products/' . $product->image)) }}" 
-                     class="img-fluid rounded-3" 
+                <img id="mainProductImg" 
+                     src="{{ asset(str_starts_with($product->image, 'http') ? $product->image : (str_contains($product->image, 'storage') ? $product->image : 'storage/products/' . $product->image)) }}" 
+                     class="img-fluid rounded-3 transition" 
                      alt="{{ $product->productname }}" 
-                     style="max-height: 420px; object-fit: contain; width: 100%;">
+                     style="max-height: 420px; object-fit: contain; width: 100%; transition: opacity 0.2s ease;">
+            </div>
+
+            {{-- Thư viện Ảnh phụ (Product Gallery Thumbnails) --}}
+            @php
+                $mainImgUrl = asset(str_starts_with($product->image, 'http') ? $product->image : (str_contains($product->image, 'storage') ? $product->image : 'storage/products/' . $product->image));
+            @endphp
+
+            <div class="d-flex justify-content-center flex-wrap gap-2">
+                {{-- Thumb Ảnh chính --}}
+                <div class="gallery-thumb border rounded-3 p-1 cursor-pointer bg-white active-thumb" 
+                     style="width: 70px; height: 70px; cursor: pointer; transition: all 0.2s ease;"
+                     onclick="changeMainImg('{{ $mainImgUrl }}', this)">
+                    <img src="{{ $mainImgUrl }}" class="w-100 h-100 object-fit-contain rounded-2">
+                </div>
+
+                {{-- List Thumb các Ảnh phụ --}}
+                @if($product->images && $product->images->count() > 0)
+                    @foreach($product->images as $galleryImg)
+                        @php
+                            $subImgUrl = asset(str_starts_with($galleryImg->image, 'http') ? $galleryImg->image : (str_contains($galleryImg->image, 'storage') ? $galleryImg->image : 'uploads/products/' . $galleryImg->image));
+                        @endphp
+                        <div class="gallery-thumb border rounded-3 p-1 cursor-pointer bg-white" 
+                             style="width: 70px; height: 70px; cursor: pointer; transition: all 0.2s ease;"
+                             onclick="changeMainImg('{{ $subImgUrl }}', this)">
+                            <img src="{{ $subImgUrl }}" class="w-100 h-100 object-fit-contain rounded-2">
+                        </div>
+                    @endforeach
+                @endif
             </div>
         </div>
 
@@ -132,4 +161,26 @@
         </div>
     @endif
 </div>
+
+<script>
+    function changeMainImg(src, el) {
+        const mainImg = document.getElementById('mainProductImg');
+        if (!mainImg) return;
+
+        mainImg.style.opacity = '0.3';
+        setTimeout(() => {
+            mainImg.src = src;
+            mainImg.style.opacity = '1';
+        }, 150);
+
+        document.querySelectorAll('.gallery-thumb').forEach(thumb => {
+            thumb.style.borderColor = '#e2e8f0';
+            thumb.style.borderWidth = '1px';
+        });
+        if (el) {
+            el.style.borderColor = '#6366f1';
+            el.style.borderWidth = '2px';
+        }
+    }
+</script>
 @endsection

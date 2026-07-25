@@ -46,26 +46,41 @@
                         <div class="card-body p-4"> 
                             <div class="mb-3"> 
                                 <label class="form-label fw-semibold">Họ và tên <span class="text-danger">*</span></label> 
-                                <input type="text" name="fullname" class="form-control form-control-lg" placeholder="Ví dụ: Nguyễn Văn A" required 
+                                <input type="text" name="fullname" class="form-control form-control-lg @error('fullname') is-invalid @enderror" placeholder="Ví dụ: Nguyễn Văn A" required 
                                        value="{{ old('fullname') }}"> 
+                                @error('fullname')
+                                    <div class="invalid-feedback fw-semibold">{{ $message }}</div>
+                                @enderror
                             </div> 
                             <div class="mb-3"> 
                                 <label class="form-label fw-semibold">Số điện thoại <span class="text-danger">*</span></label> 
-                                <input type="text" name="phone" class="form-control form-control-lg" placeholder="Ví dụ: 0901234567" required 
+                                <input type="text" name="phone" class="form-control form-control-lg @error('phone') is-invalid @enderror" placeholder="Ví dụ: 0901234567" required 
                                        value="{{ old('phone') }}"> 
+                                @error('phone')
+                                    <div class="invalid-feedback fw-semibold">{{ $message }}</div>
+                                @enderror
                             </div> 
                             <div class="mb-3"> 
                                 <label class="form-label fw-semibold">Email nhận hóa đơn</label> 
-                                <input type="email" name="email" class="form-control form-control-lg" placeholder="Ví dụ: nguyenvana@gmail.com" 
+                                <input type="email" name="email" class="form-control form-control-lg @error('email') is-invalid @enderror" placeholder="Ví dụ: nguyenvana@gmail.com" 
                                        value="{{ old('email') }}"> 
+                                @error('email')
+                                    <div class="invalid-feedback fw-semibold">{{ $message }}</div>
+                                @enderror
                             </div> 
                             <div class="mb-3"> 
                                 <label class="form-label fw-semibold">Địa chỉ nhận hàng <span class="text-danger">*</span></label> 
-                                <textarea name="address" rows="3" class="form-control" placeholder="Số nhà, tên đường, phường/xã, quận/huyện..." required>{{ old('address') }}</textarea> 
+                                <textarea name="address" rows="3" class="form-control @error('address') is-invalid @enderror" placeholder="Số nhà, tên đường, phường/xã, quận/huyện..." required>{{ old('address') }}</textarea> 
+                                @error('address')
+                                    <div class="invalid-feedback fw-semibold">{{ $message }}</div>
+                                @enderror
                             </div> 
                             <div class="mb-3"> 
                                 <label class="form-label fw-semibold">Ghi chú đơn hàng (nếu có)</label> 
-                                <textarea name="note" rows="2" class="form-control" placeholder="Ghi chú thêm về thời gian giao hàng, hướng dẫn chỉ đường...">{{ old('note') }}</textarea> 
+                                <textarea name="note" rows="2" class="form-control @error('note') is-invalid @enderror" placeholder="Ghi chú thêm về thời gian giao hàng, hướng dẫn chỉ đường...">{{ old('note') }}</textarea> 
+                                @error('note')
+                                    <div class="invalid-feedback fw-semibold">{{ $message }}</div>
+                                @enderror
                             </div> 
                         </div> 
                     </div> 

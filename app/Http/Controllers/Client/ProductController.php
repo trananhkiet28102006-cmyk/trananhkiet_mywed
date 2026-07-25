@@ -13,7 +13,7 @@ class ProductController extends Controller
     // Chi tiết sản phẩm
     public function show($slug)
     {
-        $product = Product::where('slug', $slug)->where('status', 1)->firstOrFail();
+        $product = Product::with(['category', 'brand', 'images'])->where('slug', $slug)->where('status', 1)->firstOrFail();
         
         // Lấy danh sách sản phẩm liên quan (cùng danh mục hoặc cùng thương hiệu, loại trừ sản phẩm hiện tại)
         $relatedProducts = Product::where('status', 1)

@@ -69,6 +69,12 @@
                         <i class="bi bi-funnel-fill me-1"></i> Tất cả sản phẩm
                     </a> 
                 </li> 
+
+                <li class="nav-item"> 
+                    <a class="nav-link {{ request()->routeIs('posts.*') ? 'active' : '' }}" href="{{ route('posts.index') }}">
+                        <i class="bi bi-journal-text me-1"></i> Tin tức
+                    </a> 
+                </li>
             </ul> 
  
             {{-- Tìm kiếm --}} 

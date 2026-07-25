@@ -119,5 +119,51 @@
             @endforeach 
         </div> 
     </div>
+
+    {{-- Section Tin Tức Mới Nhất --}}
+    @if(isset($latestPosts) && $latestPosts->count() > 0)
+        <div class="mt-5 pt-4 border-top">
+            <div class="d-flex justify-content-between align-items-end mb-4">
+                <div>
+                    <h3 class="section-title text-dark">
+                        <i class="bi bi-journal-text text-primary"></i> Tin Tức & Đánh Giá Công Nghệ
+                    </h3>
+                    <div class="section-subtitle">Cập nhật xu hướng công nghệ và thủ thuật hữu ích</div>
+                </div>
+                <a href="{{ route('posts.index') }}" class="btn btn-link text-primary fw-bold text-decoration-none pb-4">
+                    Xem tất cả bài viết <i class="bi bi-arrow-right me-1"></i>
+                </a>
+            </div>
+
+            <div class="row g-4 mb-4">
+                @foreach ($latestPosts as $post)
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 rounded-4 shadow-sm product-card overflow-hidden">
+                            <div class="product-img-wrapper" style="padding-top: 56.25%;">
+                                <img src="{{ str_starts_with($post->image, 'http') ? $post->image : (str_contains($post->image, 'storage') ? asset($post->image) : asset('uploads/posts/' . $post->image)) }}" 
+                                     alt="{{ $post->title }}">
+                            </div>
+                            <div class="card-body p-4 d-flex flex-column justify-content-between">
+                                <div>
+                                    <span class="text-muted small d-block mb-2"><i class="bi bi-calendar3 text-primary me-1"></i> {{ $post->created_at->format('d/m/Y') }}</span>
+                                    <h5 class="fw-bold text-dark mb-2 line-clamp-2" style="font-size: 1rem;">
+                                        <a href="{{ route('posts.show', $post->slug) }}" class="text-decoration-none text-dark">
+                                            {{ $post->title }}
+                                        </a>
+                                    </h5>
+                                    <p class="text-muted small line-clamp-2 mb-3">
+                                        {{ Str::limit(strip_tags($post->content), 90) }}
+                                    </p>
+                                </div>
+                                <a href="{{ route('posts.show', $post->slug) }}" class="btn btn-sm btn-outline-primary rounded-pill w-100 fw-bold">
+                                    Đọc bài viết <i class="bi bi-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    @endif
 </div>
 @endsection 

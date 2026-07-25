@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Product;
+use App\Models\Post;
 
 class HomeController extends Controller
 {
@@ -40,9 +41,17 @@ class HomeController extends Controller
             ->orderByDesc('created_at') 
             ->take(8) 
             ->get(); 
+
+        // Bài viết tin tức mới nhất (3 bài)
+        $latestPosts = Post::where('status', 1)
+            ->latest('created_at')
+            ->take(3)
+            ->get();
+
         return view('client.home', compact( 
             'newProducts', 
-            'saleProducts' 
+            'saleProducts',
+            'latestPosts'
         )); 
     }
 }

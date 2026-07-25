@@ -5,6 +5,10 @@
             @if(Auth::check())
                 <span class="text-secondary">Xin chào <strong>{{ Auth::user()->fullname }}</strong></span>
                 
+                <a href="{{ route('admin.change-password.form') }}" class="btn btn-outline-primary btn-sm">
+                    <i class="bi bi-key-fill"></i> Đổi mật khẩu
+                </a>
+
                 <form action="{{ route('admin.logout') }}" method="POST" class="m-0" onsubmit="return confirm('Bạn có chắc chắn muốn đăng xuất?')">
                     @csrf
                     <button type="submit" class="btn btn-outline-danger btn-sm">

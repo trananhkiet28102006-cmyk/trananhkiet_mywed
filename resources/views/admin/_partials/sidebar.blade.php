@@ -39,8 +39,8 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-white py-2 px-3 rounded hover-bg" href="{{ route('admin.change-password') }}">
-                <i class="bi bi-key me-2"></i> Đổi mật khẩu
+            <a class="nav-link text-white py-2 px-3 rounded hover-bg" href="{{ route('admin.change-password.form') }}">
+                <i class="bi bi-key-fill me-2 text-warning"></i> Đổi mật khẩu
             </a>
         </li>
     </ul>

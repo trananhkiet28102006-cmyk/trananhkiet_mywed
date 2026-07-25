@@ -1,5 +1,5 @@
 // Quản lý Chế độ Sáng / Tối (Light / Dark Mode) Tự động theo Thời gian thực
-(function() {
+(function () {
     function getTimeBasedTheme() {
         const hour = new Date().getHours();
         return (hour >= 18 || hour < 6) ? 'dark' : 'light';
@@ -47,7 +47,7 @@
             themeToggleBtn.addEventListener('click', () => {
                 const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
                 const newTheme = isDark ? 'light' : 'dark';
-                
+
                 localStorage.setItem('user-theme', newTheme);
                 applyTheme(newTheme);
             });

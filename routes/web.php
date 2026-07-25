@@ -10,16 +10,22 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\ChangePasswordController;
 
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\ProductController as ClientProductController;
 use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\PostController as ClientPostController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/products/{slug}', [ClientProductController::class, 'show'])->name('products.show');
 Route::get('/category/{slug}', [ClientProductController::class, 'category'])->name('category');
 Route::get('/brand/{slug}', [ClientProductController::class, 'brand'])->name('brand');
 Route::get('/search', [ClientProductController::class, 'search'])->name('products.search');
+
+// Tin Tức phía Client
+Route::get('/posts', [ClientPostController::class, 'index'])->name('posts.index');
+Route::get('/posts/{slug}', [ClientPostController::class, 'show'])->name('posts.show');
 
 Route::prefix('cart')->controller(CartController::class)->name('cart.')->group(function () { 
     Route::get('/show', 'show')->name('show'); 
@@ -91,6 +97,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('orders', [AdminOrderController::class, 'index'])->name('orders.index');
             Route::get('orders/{id}', [AdminOrderController::class, 'show'])->name('orders.show');
             Route::post('orders/{id}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.updateStatus');
+            Route::post('orders/bulk-status', [AdminOrderController::class, 'bulkStatus'])->name('orders.bulkStatus');
+
+            // Đổi mật khẩu Admin có gửi mail Gmail
+            Route::get('change-password', [ChangePasswordController::class, 'showChangePasswordForm'])->name('change-password.form');
+            Route::post('change-password', [ChangePasswordController::class, 'updatePassword'])->name('change-password.update');
         });
 
         // Nhân viên (role = 2) và Admin (role = 1) đều được phép xem danh sách sản phẩm
